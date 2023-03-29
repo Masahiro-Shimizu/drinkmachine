@@ -13,7 +13,7 @@
     </header>
     <br>
     <div class="container">
-      @yield('content')
+      @yield('list')
     </div>
     <footer class="footer bg-dark  fixed-bottom">
       @include('layouts.footer')

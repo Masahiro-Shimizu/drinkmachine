@@ -6,7 +6,7 @@
 
 @extends('layouts.common')
 @section('title', '商品一覧')
-@section('content')
+@section('list')
 <div class="container">
     <div class="row">
         <div class="col-md-12">

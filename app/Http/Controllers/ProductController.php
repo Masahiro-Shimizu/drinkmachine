@@ -131,8 +131,8 @@ public function showList(Request $request)
     }
 
     /**
-     * 商品編集画面を表示する
-     * ＠param ProductRequest $request
+     * 商品編集フォーム
+     * @param ProductRequest $request
      * @return view
      */
     public function exeUpdate(ProductRequest $request){
