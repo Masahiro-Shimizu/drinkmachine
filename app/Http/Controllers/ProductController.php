@@ -42,7 +42,7 @@ public function showList(Request $request)
 
     /**
      * 商品詳細画面
-     *  @param $id
+     *  @param $id $message
      *  @return $view
      */
     public function showDetail($id) {
@@ -51,7 +51,7 @@ public function showList(Request $request)
 
         try{
             if(is_null($product)) {
-                \session::flash('err_msg','データがありません。');
+                \Session::flash('err_msg',config('messages.message1'));
                 return redirect(route('product.list'));
             }
         }catch(\Throwable $e){
@@ -103,8 +103,7 @@ public function showList(Request $request)
             \DB::rollback();
             throw new \Exception($e->getMessage());
         }
-        \Session::flash('err_msg','商品を登録しました。');
-
+        \Session::flash('err_msg',config('messages.message2'));
         return redirect(route('product.list'));
     }
 
@@ -121,7 +120,7 @@ public function showList(Request $request)
             $product = $product_instance->productDetail($id);
             $company_list = $company_instance->companyList();
             if(is_null($product)) {
-                \session::flash('err_msg','データがありません。');
+                \Session::flash('err_msg',config('messages.message3'));
                 return redirect(route('product.list'));
             }
         }catch(\Throwable $e){
@@ -161,8 +160,7 @@ public function showList(Request $request)
             \DB::rollback();
             throw new \Exception($e->getMessage());
         }
-        \Session::flash('err_msg','商品情報を更新しました。');
-
+        \Session::flash('err_msg',config('messages.message3'));
         return redirect(route('product.list'));
     }
 
@@ -174,7 +172,7 @@ public function showList(Request $request)
     {
         $product_instance = new Product;
         if(empty($id)){
-            \Session::flash('err_msg','該当データはありません');
+            \Session::flash('err_msg', config('messages.message1'));
             return redirect(route('product.list'));
         }
 
@@ -186,8 +184,7 @@ public function showList(Request $request)
             throw new \Exception($e->getMessage());
             \DB::rollback();
         }
-        \Session::flash('err_msg','削除しました。');
-
+        \Session::flash('err_msg', config('messages.message4'));
         return redirect(route('product.list'));
     }
 

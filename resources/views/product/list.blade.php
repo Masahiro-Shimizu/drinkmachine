@@ -34,7 +34,7 @@
                     </div>
                 </form>
             </div>
-            @if (session('err_msg'))
+            @if ('err_msg')
             <p class ="text-danger">{{ session('err_msg') }}</p>
             @endif
 
