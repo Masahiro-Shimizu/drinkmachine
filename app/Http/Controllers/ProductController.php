@@ -27,7 +27,7 @@ class ProductController extends Controller
      * 
      * @return view
      */
-public function showList(Request $request)
+    public function showList(Request $request)
     {
         $product_instance = new Product;
         $company_data = Company::all();
