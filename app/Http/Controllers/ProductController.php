@@ -22,23 +22,6 @@ class ProductController extends Controller
     $this->middleware('auth');
     }
         
-    /**
-     * 商品一覧を表示する
-     * 
-     * @return view
-     */
-    public function showList(Request $request)
-    {
-        $product_instance = new Product;
-        $company_data = Company::all();
-        $keyword = $request->input('keyword');
-        $company_id = $request->input('company_id');
-
-
-        $product_list = $product_instance->getList($keyword, $company_id);
-
-        return view('product.list', compact('product_list', 'company_data', 'keyword', 'company_id'));
-    }
 
     /**
      * 商品詳細画面
@@ -188,4 +171,34 @@ class ProductController extends Controller
         return redirect(route('product.list'));
     }
 
+    /**
+     * 商品一覧を表示する
+     * 
+     * @return view
+     */
+    public function showList(Request $request)
+    {
+        // 検索結果を取得
+        $model = new Product();
+        $products = $model->searchProducts($request);
+
+        // 全メーカーを取得
+        $model = new Company();
+        $companies = $model->companyList();
+
+        return view('product.list', compact('products', 'companies'));
+    }
+
+        /**
+     * Ajaxによる検索処理
+     */
+    public function searchProducts(Request $request)
+    {
+        // 検索結果を取得
+        $model = new Product();
+        $products = $model->searchProducts($request);
+
+        return response()->json($products);
+    }
 }
+

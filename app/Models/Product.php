@@ -183,4 +183,64 @@ class Product extends Model
         return $products->get();
     }
 
+     /**
+     * 検索処理
+     */
+    public function searchProducts($request) {
+        // 検索フォームに入力された値を取得
+        // 商品名
+        $productName = $request->input('products.id');
+        // メーカー名
+        $companyName = $request->input('companies.company_name');
+        // 価格(下限)
+        $priceMin = $request->input('products.price');
+        // 価格(上限)
+        $priceMax = $request->input('products.price');
+        // 在庫数(下限)
+        $stockMin = $request->input('products.stock');
+        // 在庫数(上限)
+        $stockMax = $request->input('products.stock');
+        
+        $query = Product::query();
+        // テーブル結合
+        $query->join('companies', function ($query) use ($request) {
+            $query->on('products.company_id', '=', 'companies.id');
+            });
+        // 一覧画面でソート可能にする
+        //$query->sortable();
+        // 商品名の検索条件(部分一致)
+        if(!empty($productName)) {
+            $query->where('products.product_name', 'LIKE', "%{$productName}%");
+        }
+        // メーカー名の検索条件
+        if(!empty($companyName)) {
+            $query->where('companies.company_name', 'LIKE', $companyName);
+        }
+        // 価格(下限)の検索条件
+        if(!empty($priceMin) || $priceMax == "0") {
+            $query->where('price', '>=', $priceMin);
+        }
+        // 価格(上限)の検索条件
+        if(!empty($priceMax) || $priceMax == "0") {
+            $query->where('price', '<=', $priceMax);
+        }
+        // 在庫数(下限)の検索条件
+        if(!empty($stockMin) || $stockMin == "0") {
+            $query->where('stock', '>=', $stockMin);
+        }
+        // 在庫数(上限)の検索条件
+        if(!empty($stockMax) || $stockMax == "0") {
+            $query->where('stock', '<=', $stockMax);
+        }
+
+        // 検索条件に一致するデータを全て取得
+        $products = $query
+        ->select('products.id', 'companies.id as company_id', 'companies.company_name', 'products.product_name',
+        'products.price', 'products.stock', 'products.comment', 'products.img_path')
+        ->orderBy("products.id")
+        ->get();
+
+        return $products;
+    }
+
 }
