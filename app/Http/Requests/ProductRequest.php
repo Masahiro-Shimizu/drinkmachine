@@ -24,11 +24,23 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'company_id' => 'required | max:30',
-            'product_name' => 'required | max:100',
-            'price' => 'required | max:11',
-            'stock' => 'required | max:11',
-            'comment' => 'max:255'
+            'keyword' => 'string',
+            'from_price' => 'integer',
+            'to_price' => 'integer',
+            'from_stock' => 'integer',
+            'to_stock' => 'integer',
+            'product_name' => ['required','string', 'max:255'],
+            'price' => ['required','integer',  'min:0'],
+            'stock' => ['required','integer',  'min:0'],
+            'comment' => ['max:200'],
+            'company_id' => ['required','exists:companies,id'],
+            'img_path' => [
+                'file', // ファイルがアップロードされている
+                'image', // 画像ファイルである
+                'mimes:jpeg,jpg,png', // 形式はjpegかpng
+                'dimensions:min_width=50,min_height=50,max_width=1000,max_height=1000', // 50*50 ~ 1000*1000 まで
+              ]
+
         ];
     }
 }

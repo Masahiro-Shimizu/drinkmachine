@@ -8,72 +8,78 @@
 @section('title', '商品一覧')
 @section('list')
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>商品一覧</h2>
-            <div class="form-group mt-3">
-                <form method="GET" action="{{ route('product.list') }}" id="searchForm" class="form-inline my-2 my-lg-0">
-                    <div class="search-form">
-                    <label for="productName">商品名</label>
-                            <div class="col-auto">
-                                <input type="text" class="form-control" id="productName" name="productName">
+    <div class="row justify-content-center">
+        <h1>商品一覧画面</h1>
+        <div class="col-md-8">
+            <div>
+                <form id="search-products">
+                    @csrf
+
+                    <div>
+                        <label>
+                            商品名：
+                            <input type="text" name="keyword" id="keyword">
+                        </label>
+                    </div>
+
+
+                    <div>
+                        <label>
+                            メーカー名：
+                            <div>
+                                <select class="form-control" id="company_id" name="company_id">
+                                    <option value="">未選択</option>
+                                    @foreach ($companies as $company)
+                                    <option value="{{ $company->id }}"> {{ $company->company_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </label>
-                    
-                    <div class="search_company-name">
-                        <select name="company_id">
-                            <option selected="select_name" value="" class="select_placeholder" >メーカーを選択してください</option>
-                            @foreach ($companies as $company)
-                                <option value="{{ $company->company_name }}">{{ $company->company_name }}</option>
-                            @endforeach
-                        </select>
                     </div>
-                    <div class ="search-btn ml-2">
-                        <button class="btn btn-secondary" type="button" id="searchButton">検索</button>
+
+
+                    <diV>
+                        <label>
+                            価格:
+                            <input type="text" name="from_price" id="from_price">
+                            <span class="form-control">~</span>
+                            <input type="text" name="to_price" id="to_price">
+                        </label>
                     </div>
+
+
+                    <div>
+                        <label>
+                            在庫数:
+                            <input type="text" name="from_stock" id="from_stock">
+                            <span class="form-control">~</span>
+                            <input type="text" name="to_stock" id="to_stock">
+                        </label>
+                    </div>
+
+                    <button id="search" type="button" value="検索">検索</button>
                 </form>
             </div>
-            @if ('err_msg')
-            <p class ="text-danger">{{ session('err_msg') }}</p>
-            @endif
-
-            <table class="table table-striped" id="resultTable">
-                    <thead>
-                        <tr>
-                            <th>@sortablelink ('id', '商品ID')</th>
-                            <th>@sortablelink ('img_path', '商品画像')</th>
-                            <th>@sortablelink ('product_name', '商品名')</th>
-                            <th>@sortablelink ('price', '価格')</th>
-                            <th>@sortablelink ('stock', '在庫数')</th>
-                            <th>@sortablelink ('comment', 'コメント')</th>
-                            <th>@sortablelink ('company_name', 'メーカー名')</th>
-                            <th>詳細表示ボタン</th>
-                            <th>削除ボタン</th>
-                        </tr>
-                    </thead>
-                <tbody>
-                    @foreach ($products as $product)
-                    <tr>
-                    <td>{{ $product->id }}</td>
-                    <td>
-                        @if ($product->img_path !=='')
-                        <img src="{{ asset('storage/'.$product->img_path)}}">
-                        @else
-                        <p>no image</p>
-                        @endif
-                    </td>
-                    <td id="resultProductName">{{ $product->product_name }}</td>
-                    <td id="resultPrice">{{ $product->price }}</td>
-                    <td id="resultStock">{{ $product->stock }}</td>
-                    <td>{{ $product->comment }}</td>
-                    <td id="resultCompanyName">{{ $product->company_name }}</td>
-                    <td><a href="{{ route('product.detail', ['id'=>$product->id]) }}" class="btn btn-primary">詳細表示</a></td>
-                    <td><input type="button" class="btn btn-danger" id="deleteButton" value="削除"></td>
-                </tr>
-                    @endforeach
-                </tbody>
-            </table>
         </div>
+
+        <table id="sort_table" class="tablesorter-ice" data-sortlist="[[0,0]]">
+            <thead>
+                <tr>
+                    <th>商品ID</th>
+                    <th>商品名</th>
+                    <th>価格</th>
+                    <th>在庫数</th>
+                    <th>メーカー名</th>
+                    <th>画像</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody id="products_area">
+
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
