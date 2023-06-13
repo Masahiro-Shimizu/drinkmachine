@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', function(){
    function ajaxSearch() {
       $("tbody").empty();
       let keyword = $('#keyword').val();
-      let company_id = $('#company_id').val();
+      let product_id = $('#product_id').val();
       let from_price = $('#from_price').val();
       let to_price = $('#to_price').val();
       let from_stock = $('#from_stock').val();
@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', function(){
          data: {
             // サーバーに送信したいデータを指定
             keyword: keyword,
-            company_id: company_id,
+            product_id: product_id,
             from_price: from_price,
             to_price: to_price,
             from_stock: from_stock,
@@ -67,8 +67,7 @@ window.addEventListener('DOMContentLoaded', function(){
              `;
             $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
          })
-   
-         $(document).ready(function () {
+         $(function () {
             $('#sort_table').tablesorter();
          });
          $("#sort_table").trigger("update");

@@ -24,6 +24,7 @@ class ProductController extends Controller
     public function showList(Request $request)
     {
         $products = \DB::table('products')->get();
+        $products = Product::sortable()->get();
         return view('product.list', [
             'companies' => Company::all(),
             'products' => $products

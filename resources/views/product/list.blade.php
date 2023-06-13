@@ -65,11 +65,11 @@
         <table id="sort_table" class="tablesorter-ice" data-sortlist="[[0,0]]">
             <thead>
                 <tr>
-                    <th>商品ID</th>
-                    <th>商品名</th>
-                    <th>価格</th>
-                    <th>在庫数</th>
-                    <th>メーカー名</th>
+                    <th>@sortablelink('id')商品ID</th>
+                    <th>@sortablelink('product_name')商品名</th>
+                    <th>@sortablelink('price')価格</th>
+                    <th>@sortablelink('stock')在庫数</th>
+                    <th>@sortablelink('company_name')メーカー名</th>
                     <th>画像</th>
                     <th></th>
                     <th></th>
