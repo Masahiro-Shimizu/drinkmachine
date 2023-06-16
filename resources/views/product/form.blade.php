@@ -1,6 +1,6 @@
 @extends('layouts.common')
 @section('title', '商品登録画面')
-@section('content')
+@section('list')
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <h2>商品登録フォーム</h2>

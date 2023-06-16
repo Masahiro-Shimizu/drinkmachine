@@ -6,12 +6,13 @@
 -->
 @extends('layouts.common')
 @section('title', '商品編集画面')
-@section('content')
+@section('list')
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <h2>商品編集フォーム</h2>
-        <form method="POST" enctype="multipart/form-data" action="{{ route('product.update') }}" onSubmit="return checkSubmit()">
+        <form method="POST" enctype="multipart/form-data" action="{{ route('product.update') }}" onSubmit="return checkUpdate()">
             @csrf
+            <input type="hidden" name="id" value="{{ $product->id }}">
             <div class="form-group">
                 <label for="company_id">
                     メーカー名
@@ -26,7 +27,6 @@
                         {{ $company_data -> company_name }}</option>
                     @endforeach
                 </select>
-
                 @if ($errors->has('company_id'))
                     <div class="text-danger">
                         {{ $errors->first('company_id') }}
@@ -38,7 +38,7 @@
                 <label for="product_name">
                     商品名
                 </label>
-                <input name="product_name" class="form-control" value="{{ old('product_name') }}" type="text">
+                <input name="product_name" class="form-control" value="{{ $product->product_name }}" type="text">
                 @if ($errors->has('product_name'))
                     <div class="text-danger">
                         {{ $errors->first('product_name') }}
@@ -50,7 +50,7 @@
                 <label for="price">
                     価格
                 </label>
-                <input name="price" class="form-control" value="{{ old('price') }}" type="text">
+                <input name="price" class="form-control" value="{{ $product->price }}" type="text">
                 @if ($errors->has('price'))
                     <div class="text-danger">
                         {{ $errors->first('price') }}
@@ -90,8 +90,8 @@
                 @if ($product->img_path === null)
                     <img class="w-25 h-25"src="/storage/noimage.png">
                 @else
-                <img class="w-25 h-25"src="{{ asset( '/storage'.$product->img_path) }}">
-                    @endif
+                    <img class="w-25 h-25"src="{{ asset( '/storage'.$product->img_path) }}">
+                @endif
                 <input type="file" name="img_path" class="form-control-file mt-2">
             </div>
             <div class="mt-5 mb-5">

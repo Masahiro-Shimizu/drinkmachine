@@ -6,7 +6,7 @@
 -->
 @extends('layouts.common')
 @section('title', '商品詳細画面')
-@section('content')
+@section('list')
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -30,10 +30,10 @@
             <br>
             <span>コメント:{{ $product->comment }}</span>
         </div>
-        <div class="mt-5">
-            <button type="button" class="btn btn-primary" onclick="location.href='/product/edit/{{ $product->id }}'">
-                編集
-            </button>
+    <div class="mt-5">
+    <button type="button" class="btn btn-primary" onclick="location.href='/product/edit/{{ $product->id }}'">
+         編集
+    </button>
         </div>
     </div>
 @endsection
