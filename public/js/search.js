@@ -16,6 +16,7 @@ window.addEventListener('DOMContentLoaded', function(){
       $("tbody").empty();
       let keyword = $('#keyword').val();
       let product_id = $('#product_id').val();
+      let company_id = $('#company_id').val();
       let from_price = $('#from_price').val();
       let to_price = $('#to_price').val();
       let from_stock = $('#from_stock').val();
@@ -31,6 +32,7 @@ window.addEventListener('DOMContentLoaded', function(){
             // サーバーに送信したいデータを指定
             keyword: keyword,
             product_id: product_id,
+            company_id: company_id,
             from_price: from_price,
             to_price: to_price,
             from_stock: from_stock,
