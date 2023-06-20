@@ -24,7 +24,6 @@ class ProductController extends Controller
     public function showList(Request $request)
     {
         $products = \DB::table('products')->get();
-        $products = Product::sortable()->get();
         return view('product.list', [
             'companies' => Company::all(),
             'products' => $products
@@ -43,10 +42,12 @@ class ProductController extends Controller
         $to_price = $request->input('to_price');
         $from_stock = $request->input('from_stock');
         $to_stock = $request->input('to_stock');
-
+        
+        
         $query = Product::query();
 
         $query->join('companies', 'products.company_id', '=', 'companies.id')
+            ->sortable()
             ->select('products.*', 'companies.company_name');
 
         //メーカー検索
@@ -75,7 +76,7 @@ class ProductController extends Controller
             $query->where('stock', '<=', $to_stock);
         }
 
-        $products = $query->get();
+        $products = $query->sortable()->get();
 
         return  response()->json($products);
     }

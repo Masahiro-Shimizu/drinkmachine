@@ -11,10 +11,10 @@ class Product extends Model
 
     //テーブルを指定
     protected  $table = 'products';
-    use sortable;
+    use Sortable;
 
     protected $fillable = ['user_id', 'comment', 'img_path', 'product_name', 'price', 'stock', 'company_id'];
-
+    protected $sortable = ['product_id','product_name', 'company_id'];
 
 
     public function getList() {
