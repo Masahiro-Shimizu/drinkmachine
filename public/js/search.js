@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', function(){
             if (value.img_path !== "") {
                img_path = '/images/' + value.img_path;
             } else {
-               img_path = 'http://localhost:8888/vmachine/public/images/no_image.png';
+               img_path = 'http://localhost:8000/drinkmachine/public/images/no_image.png';
             }
             html = `
                           <tr class="product_list">
@@ -83,7 +83,7 @@ window.addEventListener('DOMContentLoaded', function(){
    //商品詳細ページへ
    $(document).on("click", ".show_button", function () {
       let product_id = $(this).closest('tr').children('td:first').text();
-      window.location.href = "/vmachine/public/products/" + product_id;
+      window.location.href = "/product/" + product_id;
    });
    
    // 商品削除

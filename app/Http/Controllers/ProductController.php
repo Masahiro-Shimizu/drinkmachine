@@ -92,80 +92,128 @@ class ProductController extends Controller
     }
 
 
-    //新規出品フォーム
-    public function create()
-    {
-        return view('products.create', [
-            'companies' => Company::all(),
-        ]);
+     /**
+     * 商品登録画面
+     * 
+     * @return view
+     */
+    public function showCreate() {
+        $selectItems = Company::all();
+
+        return view('product.form', compact('selectItems'));
     }
 
 
-    // 商品追加処理
-    public function store(ProductRequest $request, FileUploadService $service)
-    {
-        // //画像投稿処理
-        if (isset($img_path)) {
-            $file_name = $request->file('img_path')->getClientOriginalName();
-            $path = $request->img_path->storeAs('public/images', $file_name);
-            $save_path = str_replace('public/images/', '', $path);
-        } else {
-            $save_path = "";
+    /**
+     * 商品登録画面を表示する
+     * ＠param ProductRequest $request
+     * @return view
+     */
+    public function exeStore(ProductRequest $request){
+        $product_instance = new Product;
+        $img_path = $request->file('img_path');
+
+        $path = null;
+        if (!empty($img_path)) {
+            $path = $img_path->store('\img', 'public');
         }
+        
+        $insert_data = [];
+        $insert_data['company_id'] = $request->input('company_id');
+        $insert_data['product_name'] = $request->input('product_name');
+        $insert_data['price'] = $request->input('price');
+        $insert_data['stock'] = $request->input('stock');
+        $insert_data['comment'] = $request->input('comment');
+        $insert_data['img_path'] = $path;
 
-        Product::create([
-            'user_id' => \Auth::user()->id,
-            'product_name' => $request->product_name,
-            'comment' => $request->comment,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'img_path' => $save_path,
-            'company_id' => $request->company_id,
-        ]);
-
-        return redirect()->route('products.index', \Auth::user());
-    }
-
-
-    //商品詳細
-    public function show($id)
-    {
-        $product = Product::find($id);
-        return view('products.show', [
-            'product' => $product
-        ]);
-    }
-
-    //商品編集フォーム
-    public function edit($id)
-    {
-        $product = Product::find($id);
-        return view('products.edit', [
-            'product' => $product,
-            'companies' => Company::all()
-        ]);
-    }
-
-    //商品更新処理
-    public function update($id, ProductEditRequest $request, FileUploadService $service)
-    {
-        $product = Product::find($id);
-        $product->update(
-            $request->only([
-                'id', 'product_name',  'company_name', 'price', 'stock', 'comment', 'img_path'
-            ])
-        );
-
-        $file_name = $request->file('img_path')->getClientOriginalName();
-        $path = $request->img_path->storeAs('public/images', $file_name);
-        $save_path = str_replace('public/images/', '', $path);
-        if ($product->img_path !== '') {
-            \Storage::disk('public')->delete($product->img_path);
+        \DB::beginTransaction();
+        try {
+            //商品を登録
+            $product_instance->createProduct($insert_data);
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
         }
-        $product->update([
-            'img_path' => $save_path, // ファイル名を保存
-        ]);
-        return redirect()->route('products.edit', $product);
+        \Session::flash('err_msg',config('messages.message2'));
+        return redirect(route('product.list'));
+    }
+    
+    /**
+     * 商品詳細画面
+     *  @param $id $message
+     *  @return $view
+     */
+    public function showDetail($id) {
+        $product_instans = new Product;
+        $product = $product_instans->productDetail($id);
+
+        try{
+            if(is_null($product)) {
+                \Session::flash('err_msg',config('messages.message1'));
+                return redirect(route('product.list'));
+            }
+        }catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
+        }
+        return view('product.detail',compact('product'));
+    }
+
+    /**
+     * 商品編集フォーム画面
+     *  @param $id
+     *  @return $view
+     */
+    public function showEdit($id) {
+        $product_instance = new Product;
+        $company_instance = new Company;
+
+        try{
+            $product = $product_instance->productDetail($id);
+            $company_list = $company_instance->companyList();
+            if(is_null($product)) {
+                \Session::flash('err_msg',config('messages.message3'));
+                return redirect(route('product.list'));
+            }
+        }catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
+        }
+        return view('product.edit',compact('product','company_list'));
+    }
+
+    /**
+     * 商品編集フォーム
+     * @param ProductRequest $request
+     * @return view
+     */
+    public function exeUpdate(ProductRequest $request){
+        $product_instance = new Product;
+        $img_path = $request->file('img_path');
+
+        $path = null;
+        if (!empty($img_path)) {
+            $path = $img_path->store('\img', 'public');
+        }
+        
+        $update_date = [];
+        $update_date['id'] = $request->input('id');
+        $update_date['company_id'] = $request->input('company_id');
+        $update_date['product_name'] = $request->input('product_name');
+        $update_date['price'] = $request->input('price');
+        $update_date['stock'] = $request->input('stock');
+        $update_date['comment'] = $request->input('comment');
+        $update_date['img_path'] = $path;
+
+        \DB::beginTransaction();
+        try {
+            $product_instance->updateProduct($update_date);
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        \Session::flash('err_msg',config('messages.message3'));
+        return redirect(route('product.list'));
     }
 
     //購入処理
