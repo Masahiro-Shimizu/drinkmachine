@@ -83,7 +83,7 @@ class ProductController extends Controller
 
 
     //削除
-    public function destroy(Request $request)
+    public function exeDelete(Request $request)
     {
         $product = Product::find($request->id);
         $product->delete();

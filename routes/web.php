@@ -36,4 +36,4 @@ Route::get('/product/{id}', 'ProductController@showDetail')->name('product.detai
 Route::get('/product/edit/{id}', 'ProductController@showEdit')->name('product.edit');
 Route::post('/product/update','ProductController@exeupdate')->name('product.update');
 //商品削除画面
-Route::post('/produst/delete/{id}','ProductController@exeDelete')->name('product.delete');
+Route::post('/product/delete','ProductController@exeDelete')->name('product.delete');

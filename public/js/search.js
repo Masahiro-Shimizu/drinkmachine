@@ -92,7 +92,7 @@ window.addEventListener('DOMContentLoaded', function(){
          let id = $(this).closest('tr').children('td:first').text();
          $.ajax({
             type: 'POST',
-            url: '/vmachine/public/products/delete',
+            url: '/product/delete',
             async: true, // 非同期通信フラグの指定
             dataType: 'json', // 受信するデータタイプの指定
             timeout: 10000, // タイムアウト時間の指定
