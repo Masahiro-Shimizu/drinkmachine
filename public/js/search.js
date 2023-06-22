@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', function(){
      }  
  
       
-     $('.product-table').empty(); //もともとある要素を空にする     
+     $("tbody").empty(); //もともとある要素を空にする     
       
        $.ajax({
          type: 'GET', //HTTP通信の種類
@@ -159,22 +159,23 @@ window.addEventListener('DOMContentLoaded', function(){
                            let stock = value.stock;
                            let company_name = value.company.company_name;
                            // １ユーザー情報のビューテンプレートを作成
-                 html = `
-                 <tr class="product-list">                    
-                     <td>${id}</td>
-                     <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
-                     <td>${product_name}</td>
-                     <td>${price}</td>
-                     <td>${stock}</td>
-                     <td>${company_name}</td>
-                     <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
-               <td><form class="id">
-               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
-               </form>
-               </td>                     
-                 </tr>
-                     `
-                     $('#products_area').append(html);
+                           html = `
+                           <tr class="product_list">
+                               <td class="id">${id}</td>
+                               <td class="product_name">${product_name}</td>
+                               <td class="price">${price}</td>
+                               <td class="stock">${stock}</td>
+                               <td class="company_name">${company_name}</td>
+                               <td class="img_path"><img src="${img_path}"></td>
+                               <td class="show"><button class="show_button" type="button" name="show" value="show">商品詳細</button></td>
+                               <form method="post" class="delete" action="{{ route('product.delete', $product->id) }}">
+                                @csrf
+                                @method('delete')
+                               <td class="delete"><button class="delete_button" data-id='".$product_id."' id="delete" type="button" name="delete" value="delete">削除</button></td>
+                               </form>
+                           </tr>
+              `;
+             $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
  });
  
    //削除機能
@@ -252,7 +253,7 @@ window.addEventListener('DOMContentLoaded', function(){
        
      }  
        
-     $('#product_area').empty(); //もともとある要素を空にする
+     $("tbody").empty(); //もともとある要素を空にする
      
        $.ajax({
          type: 'GET', //HTTP通信の種類
@@ -368,7 +369,7 @@ window.addEventListener('DOMContentLoaded', function(){
        
      }  
          
-       $('#product_area').empty(); //もともとある要素を空にする
+       $("tbody").empty(); //もともとある要素を空にする
        
          $.ajax({
            type: 'GET', //HTTP通信の種類
@@ -390,23 +391,25 @@ window.addEventListener('DOMContentLoaded', function(){
                              let price = value.price;
                              let stock = value.stock;
                              let company_name = value.company.company_name;
-                             // １ユーザー情報のビューテンプレートを作成
+                             // １ユーザー情報のビューテンプレートを作
                    html = `
-                   <tr class="product-list">                    
-                       <td>${id}</td>
-                       <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
-                       <td>${product_name}</td>
-                       <td>${price}</td>
-                       <td>${stock}</td>
-                       <td>${company_name}</td>
-                       <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
-                 <td><form class="id">
-                 <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
-                 </form>
-                 </td>                     
+                   <tr class="product_list">
+                       <td class="id">${id}</td>
+                       <td class="product_name">${product_name}</td>
+                       <td class="price">${price}</td>
+                       <td class="stock">${stock}</td>
+                       <td class="company_name">${company_name}</td>
+                       <td class="img_path"><img src="${img_path}"></td>
+                       <td class="show"><button class="show_button" type="button" name="show" value="show">商品詳細</button></td>
+                       <form method="post" class="delete" action="{{ route('product.delete', $product->id) }}">
+                        @csrf
+                        @method('delete')
+                       <td class="delete"><button class="delete_button" data-id='".$product_id."' id="delete" type="button" name="delete" value="delete">削除</button></td>
+                       </form>
                    </tr>
-                       `
-                       $('.products_area').append(html);
+      `;
+     $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
+
    });
  
      //削除機能
@@ -484,7 +487,7 @@ window.addEventListener('DOMContentLoaded', function(){
        
      }  
        
-     $('.product-table').empty(); //もともとある要素を空にする
+     $("tbody").empty(); //もともとある要素を空にする
      
        $.ajax({
          type: 'GET', //HTTP通信の種類
@@ -507,22 +510,24 @@ window.addEventListener('DOMContentLoaded', function(){
                            let stock = value.stock;
                            let company_name = value.company.company_name;
                            // １ユーザー情報のビューテンプレートを作成
-                 html = `
-                 <tr class="product-list">                    
-                     <td>${id}</td>
-                     <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
-                     <td>${product_name}</td>
-                     <td>${price}</td>
-                     <td>${stock}</td>
-                     <td>${company_name}</td>
-                     <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
-               <td><form class="id">
-               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
-               </form>
-               </td>                     
-                 </tr>
-                     `
-                     $('#products_area').append(html);
+                           html = `
+                           <tr class="product_list">
+                               <td class="id">${id}</td>
+                               <td class="product_name">${product_name}</td>
+                               <td class="price">${price}</td>
+                               <td class="stock">${stock}</td>
+                               <td class="company_name">${company_name}</td>
+                               <td class="img_path"><img src="${img_path}"></td>
+                               <td class="show"><button class="show_button" type="button" name="show" value="show">商品詳細</button></td>
+                               <form method="post" class="delete" action="{{ route('product.delete', $product->id) }}">
+                                @csrf
+                                @method('delete')
+                               <td class="delete"><button class="delete_button" data-id='".$product_id."' id="delete" type="button" name="delete" value="delete">削除</button></td>
+                               </form>
+                           </tr>
+              `;
+             $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
+ 
  });
  
   //削除機能
@@ -600,7 +605,7 @@ window.addEventListener('DOMContentLoaded', function(){
        
      }  
  
-     $('.product-table').empty(); //もともとある要素を空にする
+     $("tbody").empty(); //もともとある要素を空にする
      
        $.ajax({
          type: 'GET', //HTTP通信の種類
@@ -623,22 +628,24 @@ window.addEventListener('DOMContentLoaded', function(){
                            let stock = value.stock;
                            let company_name = value.company_name;
                            // １ユーザー情報のビューテンプレートを作成
-                 html = `
-                 <tr class="product-list">                    
-                     <td>${id}</td>
-                     <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
-                     <td>${product_name}</td>
-                     <td>${price}</td>
-                     <td>${stock}</td>
-                     <td>${company_name}</td>
-                     <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
-               <td><form class="id">
-               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
-               </form>
-               </td>                     
-                 </tr>
-                     `
-                     $('#products_area').append(html);
+                           html = `
+                           <tr class="product_list">
+                               <td class="id">${id}</td>
+                               <td class="product_name">${product_name}</td>
+                               <td class="price">${price}</td>
+                               <td class="stock">${stock}</td>
+                               <td class="company_name">${company_name}</td>
+                               <td class="img_path"><img src="${img_path}"></td>
+                               <td class="show"><button class="show_button" type="button" name="show" value="show">商品詳細</button></td>
+                               <form method="post" class="delete" action="{{ route('product.delete', $product->id) }}">
+                                @csrf
+                                @method('delete')
+                               <td class="delete"><button class="delete_button" data-id='".$product_id."' id="delete" type="button" name="delete" value="delete">削除</button></td>
+                               </form>
+                           </tr>
+              `;
+             $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
+ 
  });
  
   //削除機能
