@@ -9,36 +9,27 @@
 @section('list')
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <h2>商品編集フォーム</h2>
-        <form method="POST" enctype="multipart/form-data" action="{{ route('product.update') }}" onSubmit="return checkUpdate()">
+        <h2>商品情報編集フォーム</h2>
+        <form method="POST" action="{{ route('product.update') }}" enctype="multipart/form-data" onSubmit="return checkSubmit()">
             @csrf
-            <input type="hidden" name="id" value="{{ $product->id }}">
-            <div class="form-group">
-                <label for="company_id">
-                    メーカー名
-                </label>
-                <select name="company_id">
-                    @foreach ($company_list as $company_data)
-                    <option id="company_id" name="company_id" value="{{ $company_data->id }}"
-                        @if( $company_data->id == $product->company_id )
-                          selected
-                        @endif
-                    >
-                        {{ $company_data -> company_name }}</option>
-                    @endforeach
-                </select>
-                @if ($errors->has('company_id'))
-                    <div class="text-danger">
-                        {{ $errors->first('company_id') }}
-                    </div>
-                @endif
-            </div>
-
+            @foreach($Companies as $Company)
+            <input type="hidden" name="id" value="{{ $Company->id }}">
+            @endforeach
+            @foreach($Products as $Products)
+            <input type="hidden" name="id" value="{{ $Products->company->id }}">
+            @endforeach
+            <input type="hidden" name="id" value="{{ $Product->id }}">
             <div class="form-group">
                 <label for="product_name">
                     商品名
                 </label>
-                <input name="product_name" class="form-control" value="{{ $product->product_name }}" type="text">
+                <input
+                    id="product_name"
+                    name="product_name"
+                    class="form-control"
+                    value="{{ $Product->product_name }}"
+                    type="text"
+                >
                 @if ($errors->has('product_name'))
                     <div class="text-danger">
                         {{ $errors->first('product_name') }}
@@ -47,26 +38,51 @@
             </div>
 
             <div class="form-group">
+                <label for="company_name">
+                    メーカー
+                </label>
+                <select  id="company_name" class="form-control" name="company_name" value="">
+                <option value="{{ $Products->company->id }}" style='display:none;' selected>{{ $Products->company->company_name }}</option>
+                @foreach($Companies as $Company)
+                <option value="{{ $Company->id }}">{{ $Company->company_name }}</option>
+                @endforeach
+                </select>
+                
+            </div>
+
+            <div class="form-group">
                 <label for="price">
                     価格
                 </label>
-                <input name="price" class="form-control" value="{{ $product->price }}" type="text">
+                <input
+                    id="price"
+                    name="price"
+                    class="form-control"
+                    value="{{ $Product->price }}"
+                    type="text"
+                >
                 @if ($errors->has('price'))
                     <div class="text-danger">
                         {{ $errors->first('price') }}
                     </div>
                 @endif
             </div>
-            
+
             <div class="form-group">
                 <label for="stock">
-                    在庫
+                    在庫数
                 </label>
-                <input name="stock" class="form-control" value="{{ $product->stock }}" type="txet">
+                <input
+                    id="stock"
+                    name="stock"
+                    class="form-control"
+                    value="{{ $Product->stock }}"
+                    type="text"
+                >
                 @if ($errors->has('stock'))
-                <div class="text-danger">
-                    {{ $errors->first('stock') }}
-                </div>
+                    <div class="text-danger">
+                        {{ $errors->first('stock') }}
+                    </div>
                 @endif
             </div>
 
@@ -74,35 +90,52 @@
                 <label for="comment">
                     コメント
                 </label>
-                <textarea name="comment" class="form-control" rows="4"
-                >{{ $product->comment }}</textarea>
+                <textarea
+                    id="comment"
+                    name="comment"
+                    class="form-control"
+                    rows="2"
+                >{{ $Product->comment }}</textarea>
                 @if ($errors->has('comment'))
-                <div class="text-danger">
-                    {{$errors->first('comment') }}
-                </div>
+                    <div class="text-danger">
+                        {{ $errors->first('comment') }}
+                    </div>
                 @endif
-            </div> 
+            </div>
 
             <div class="form-group">
-                <label for="img_path">
-                    画像
-                </label>
-                @if ($product->img_path === null)
-                    <img class="w-25 h-25"src="/storage/noimage.png">
-                @else
-                    <img class="w-25 h-25"src="{{ asset( '/storage'.$product->img_path) }}">
+                
+            <input type="file" 
+                       id="img_path" 
+                       name="img_path" 
+                       value="{{ $Product->img_path }}">
+                     
+            	
+                @if ($errors->has('img_path'))
+                    <div class="text-danger">
+                        {{ $errors->first('img_path') }}
+                    </div>
                 @endif
-                <input type="file" name="img_path" class="form-control-file mt-2">
             </div>
-            <div class="mt-5 mb-5">
-                <button type="button" class="btn btn-out-secondary" onclick="history.back()">
-                    戻る 
-                </button>
+
+            <div class="mt-5">
+                <a class="btn btn-secondary" href= '/list/{{ $Product->id }}'>
+                    戻る
+                </a>
                 <button type="submit" class="btn btn-primary">
-                    更新する
+                    更新
                 </button>
             </div>
         </form>
     </div>
 </div>
+<script>
+function checkSubmit(){
+if(window.confirm('更新してよろしいですか？')){
+    return true;
+} else {
+    return false;
+}
+}
+</script>
 @endsection

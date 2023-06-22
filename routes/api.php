@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SaleController;
 use Illuminate\Http\Request;
 
 /*
@@ -13,6 +14,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['middleware' => 'api'])->group(function (){
+
+//商品購入
+Route::post('products/purchase', 'SaleController@purchase')->name('products.purchase');
+
+Route::get('products/purchase', 'SaleController@sales')->name('products.sales');
+
 });

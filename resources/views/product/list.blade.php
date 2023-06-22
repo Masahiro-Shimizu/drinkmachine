@@ -61,6 +61,9 @@
                 </form>
             </div>
         </div>
+        @if ('err_msg')
+            <p class ="text-danger">{{ session('err_msg') }}</p>
+        @endif
 
         <table id="sort_table" class="table table-striped" data-sortlist="[[0,0]]">
             <thead>
@@ -69,7 +72,7 @@
                     <th><a id="product_name"  class="sort-product_name">商品名</a></th>
                     <th><a id="price"  class="sort-price">価格</a></th>
                     <th><a id="stock"  class="sort-stock">在庫数</a></th>
-                    <th><a id="stock"  class="sort-stock">メーカー名</a></th>
+                    <th><a id="company_name"  class="sort-company_name">メーカー名</a></th>
                     <th>画像</th>
                     <th></th>
                     <th></th>

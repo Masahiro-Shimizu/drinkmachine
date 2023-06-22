@@ -219,21 +219,15 @@ class ProductController extends Controller
      *  @param $id
      *  @return $view
      */
-    public function showEdit($id) {
-        $product_instance = new Product;
-        $company_instance = new Company;
+    public function showEdit($id)
+    {
+        $Product = Product::with('company')->find($id);
+        $Companies = Company::all();  
+        $Products = Product::all();
+        
+         
 
-        try{
-            $product = $product_instance->productDetail($id);
-            $company_list = $company_instance->companyList();
-            if(is_null($product)) {
-                \Session::flash('err_msg',config('messages.message3'));
-                return redirect(route('product.list'));
-            }
-        }catch(\Throwable $e){
-            throw new \Exception($e->getMessage());
-        }
-        return view('product.edit',compact('product','company_list'));
+        return view('product.edit',['Product' => $Product, 'Companies' => $Companies, 'Products' => $Products]);
     }
 
     /**
@@ -241,35 +235,25 @@ class ProductController extends Controller
      * @param ProductRequest $request
      * @return view
      */
-    public function exeUpdate(ProductRequest $request){
-        $product_instance = new Product;
-        $img_path = $request->file('img_path');
-
-        $path = null;
-        if (!empty($img_path)) {
-            $path = $img_path->store('\img', 'public');
-        }
+    public function exeUpdate(ProductRequest $request)  {
         
-        $update_date = [];
-        $update_date['id'] = $request->input('id');
-        $update_date['company_id'] = $request->input('company_id');
-        $update_date['product_name'] = $request->input('product_name');
-        $update_date['price'] = $request->input('price');
-        $update_date['stock'] = $request->input('stock');
-        $update_date['comment'] = $request->input('comment');
-        $update_date['img_path'] = $path;
-
+        $inputs = $request->all();
+        $Product = Product::with('company')->find($inputs['id'],);
         \DB::beginTransaction();
         try {
-            $product_instance->updateProduct($update_date);
-            \DB::commit();
-        } catch (\Throwable $e) {
-            \DB::rollback();
-            throw new \Exception($e->getMessage());
-        }
-        \Session::flash('err_msg',config('messages.message3'));
-        return redirect(route('product.list'));
+        $products = new Product;
+        $productEdit = $products->productEdit($request);
+    
+        \DB::commit();
+        } catch(\Throwable $e) {
+        \DB::rollback();    
+        abort(500);
+        }   
+        \Session::flash('err_msg',config('messages.message2'));
+         
+        return redirect(route('product.edit', $Product->id ));
     }
+
 
     //購入処理
     public function purchase(SaleRequest $request)

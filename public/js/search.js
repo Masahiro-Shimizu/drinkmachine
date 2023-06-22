@@ -587,7 +587,6 @@ window.addEventListener('DOMContentLoaded', function () {
       });
    });
 
-
    //ソート機能(メーカー名)
    $(function () {
 
@@ -653,14 +652,13 @@ window.addEventListener('DOMContentLoaded', function () {
                            </tr>
               `;
                   $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
-
                });
 
                //削除機能
 
                $(function () {
 
-                  $('.btn btn-danger').on('click', function () {
+                  $('.btn-delete').on('click', function () {
                      let deleteConfirm = confirm('削除してよろしいですか？');
                      if (deleteConfirm == true) {
                         let clickDelete = $(this);
@@ -674,7 +672,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
                         $.ajax({
                            type: 'POST',
-                           url: '/list/delete/' + userID,
+                           url: '/step8/public/home/delete/' + userID,
                            dataType: 'json',
                            data: {
                               'id': userID
