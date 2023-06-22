@@ -19,6 +19,21 @@ Route::get('/home', 'HomeController@index')->name('home');
 //商品一覧画面
 Route::get('/list', 'ProductController@showList')->name('product.list');
 Route::get('/search','ProductController@searchProducts')->name('product.searchProducts');
+// 商品情報のソート
+Route::get('/list/sort/id', 'ProductController@sortId')->name('sort-id');
+
+// 商品情報のソート
+Route::get('/list/sort/product_name', 'ProductController@sortProduct_name')->name('sort-product_name');
+
+// 商品情報のソート
+Route::get('/list/sort/price', 'ProductController@sortPrice')->name('sort-price');
+
+// 商品情報のソート
+Route::get('/list/sort/stock', 'ProductController@sortStock')->name('sort-stock');
+
+// 商品情報のソート
+Route::get('/list/sort/company_name', 'ProductController@sortCompany_name')->name('sort-company_name');
+
 //①ルーティング作成(登録画面表示・ブログ登録)
 //②コントローラーの作成(登録画面の表示)
 //③登録画面のBladeを表示(CSRF対策)

@@ -11,6 +11,7 @@ use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Log;
+use ProductsTableSeeder;
 
 class ProductController extends Controller
 {
@@ -23,10 +24,15 @@ class ProductController extends Controller
     //商品一覧
     public function showList(Request $request)
     {
-        $products = \DB::table('products')->get();
+        $products = \DB::table('products')
+        ->get();
+        $sort = $request->sort;
+        $order = $request->order;
+        $orderpram = "desc";
         return view('product.list', [
             'companies' => Company::all(),
-            'products' => $products
+            'products' => $products,
+            'order' => $orderpram
         ]);
     }
 
@@ -80,6 +86,55 @@ class ProductController extends Controller
 
         return  response()->json($products);
     }
+
+    /**
+     * Show the application dashboard.
+     * 商品一覧をソート
+     * 
+     */
+    public function sortId(Request $request)
+    {        
+        $product = new Product;
+        $productSortId = $product->productSortId($request);
+    
+    return ($productSortId);
+    }
+
+    public function sortProduct_name(Request $request)
+    {        
+        $product = new Product;
+        $productSortProduct_name = $product->productSortProduct_name($request);
+
+    return ($productSortProduct_name);
+    }
+
+
+    public function sortPrice(Request $request)
+    {        
+        $product = new Product;
+        $productSortPrice = $product->productSortPrice($request);
+
+    return ($productSortPrice);
+    }
+
+
+    public function sortStock(Request $request)
+    {        
+        $product = new Product;
+        $productSortStock = $product->productSortStock($request);
+
+        return ($productSortStock);
+    }
+
+
+    public function sortCompany_name(Request $request)
+    {       
+        $product = new Product;
+        $productSortCompany_name = $product->productSortCompany_name($request);
+ 
+        return ($productSortCompany_name);
+    }
+
 
 
     //削除
