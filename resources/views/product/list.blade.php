@@ -12,7 +12,7 @@
         <h1>商品一覧画面</h1>
         <div class="col-md-8">
             <div>
-                <form id="search-products">
+                <form id="search-products" class="form-inline my-2 my-lg-0">
                     @csrf
 
                     <div>
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <table id="sort_table" class="tablesorter-ice" data-sortlist="[[0,0]]">
+        <table id="sort_table" class="table table-striped" data-sortlist="[[0,0]]">
             <thead>
                 <tr>
                     <th><a id="id"  class="sort-id">商品ID</a></th>
