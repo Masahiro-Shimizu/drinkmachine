@@ -8,6 +8,7 @@ use App\Http\Requests\ProductEditRequest;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
+use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Log;
@@ -26,7 +27,7 @@ class ProductController extends Controller
     {
         $products = \DB::table('products')
         ->get();
-        $sort = $request->sort;
+        //$sort = $request->sort;
         $order = $request->order;
         $orderpram = "desc";
         return view('product.list', [
@@ -82,7 +83,7 @@ class ProductController extends Controller
             $query->where('stock', '<=', $to_stock);
         }
 
-        $products = $query->sortable()->get();
+        $products = $query->get();
 
         return  response()->json($products);
     }
@@ -255,13 +256,17 @@ class ProductController extends Controller
     }
 
 
-    //購入処理
-    public function purchase(SaleRequest $request)
+    /**
+    * 在庫を減算する
+    * 
+    * @param  SaleRequest  $request
+    */
+    public function buy(SaleRequest $request)
     {
-        $sale = Sale::create([
-            'user_id' => \Auth::user()->id,
-            'product_id' => $request->id,
-        ]);
-        return redirect()->route('products.purchase', $request->id);
+        $result = $this->sale->purchase($request->product_id);
+
+        return[
+            'result' => $result
+        ];
     }
 }

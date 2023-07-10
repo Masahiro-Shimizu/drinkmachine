@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
-    public function purchase(Request $request)
+    public function buy(Request $request,$id)
     {
         $query = Product::query();
+        global $products;
         $products = $query->where('id', $request->product_id)->get();
         $stock = Product::select('stock')->count();
         if ($stock < 0){
@@ -36,8 +37,7 @@ class SaleController extends Controller
         return response()->json(Sale::all());
     }
 
-
-    public function sales(Request $request)
+    public function sale(Request $request)
     {
         $sale = new Sale();
         $sale->id = $request->id;
@@ -45,4 +45,6 @@ class SaleController extends Controller
         $sale->save();
         return response()->json(Sale::all());
     }
+
+
 }

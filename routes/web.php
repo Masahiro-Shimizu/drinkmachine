@@ -11,6 +11,7 @@
 |
 */
 
+Route::middleware(['middleware' => 'api'])->group(function(){
 Route::get('/', 'Homecontroller@index')->name('root.login');
 
 Auth::routes();
@@ -52,3 +53,4 @@ Route::get('/product/edit/{id}', 'ProductController@showEdit')->name('product.ed
 Route::post('/product/update','ProductController@exeUpdate')->name('product.update');
 //商品削除画面
 Route::post('/product/delete','ProductController@exeDelete')->name('product.delete');
+});
