@@ -216,13 +216,4 @@ class ProductController extends Controller
         return redirect(route('product.list'));
     }
 
-    //購入処理
-    public function purchase(SaleRequest $request)
-    {
-        $sale = Sale::create([
-            'user_id' => \Auth::user()->id,
-            'product_id' => $request->id,
-        ]);
-        return redirect()->route('products.purchase', $request->id);
-    }
 }
