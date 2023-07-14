@@ -21,6 +21,7 @@ window.addEventListener('DOMContentLoaded', function () {
       let to_price = $('#to_price').val();
       let from_stock = $('#from_stock').val();
       let to_stock = $('#to_stock').val();
+
       $.ajax({
          type: 'GET', // HTTPリクエストメソッドの指定
          url: '/search', // 送信先URLの指定

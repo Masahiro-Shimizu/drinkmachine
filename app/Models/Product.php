@@ -12,6 +12,7 @@ class Product extends Model
 
     //テーブルを指定
     protected  $table = 'products';
+    use Sortable;
 
     protected $fillable = ['user_id', 'comment', 'img_path', 'product_name', 'price', 'stock', 'company_id'];
     public $sortable = ['products'];
