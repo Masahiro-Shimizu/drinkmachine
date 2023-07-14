@@ -76,7 +76,7 @@ class ProductController extends Controller
             $query->where('stock', '<=', $to_stock);
         }
 
-        $products = $query->sortable()->get();
+        $products = $query->get();
 
         return  response()->json($products);
     }

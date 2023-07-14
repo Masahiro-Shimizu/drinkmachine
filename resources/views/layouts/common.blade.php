@@ -8,10 +8,7 @@
     <script src="/js/app.js" defer></script>
     <script src="{{ asset('js/search.js') }}" defer></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-<<<<<<< HEAD
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
-=======
->>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
 </head>
 <body>
     <header>
