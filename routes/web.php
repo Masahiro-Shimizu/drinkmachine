@@ -20,7 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 //商品一覧画面
 Route::get('/list', 'ProductController@showList')->name('product.list');
 Route::get('/search','ProductController@searchProducts')->name('product.searchProducts');
-// 商品情報のソート
+//商品情報のソート
 Route::get('/list/sort/id', 'ProductController@sortId')->name('sort-id');
 
 // 商品情報のソート

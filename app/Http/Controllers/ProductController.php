@@ -8,11 +8,9 @@ use App\Http\Requests\ProductEditRequest;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
-use App\Models\Sale;
 use Illuminate\Support\Facades\DB;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Log;
-use ProductsTableSeeder;
 
 class ProductController extends Controller
 {
@@ -25,15 +23,10 @@ class ProductController extends Controller
     //商品一覧
     public function showList(Request $request)
     {
-        $products = \DB::table('products')
-        ->get();
-        //$sort = $request->sort;
-        $order = $request->order;
-        $orderpram = "desc";
+        $products = \DB::table('products')->get();
         return view('product.list', [
             'companies' => Company::all(),
-            'products' => $products,
-            'order' => $orderpram
+            'products' => $products
         ]);
     }
 
@@ -87,55 +80,6 @@ class ProductController extends Controller
 
         return  response()->json($products);
     }
-
-    /**
-     * Show the application dashboard.
-     * 商品一覧をソート
-     * 
-     */
-    public function sortId(Request $request)
-    {        
-        $product = new Product;
-        $productSortId = $product->productSortId($request);
-    
-    return ($productSortId);
-    }
-
-    public function sortProduct_name(Request $request)
-    {        
-        $product = new Product;
-        $productSortProduct_name = $product->productSortProduct_name($request);
-
-    return ($productSortProduct_name);
-    }
-
-
-    public function sortPrice(Request $request)
-    {        
-        $product = new Product;
-        $productSortPrice = $product->productSortPrice($request);
-
-    return ($productSortPrice);
-    }
-
-
-    public function sortStock(Request $request)
-    {        
-        $product = new Product;
-        $productSortStock = $product->productSortStock($request);
-
-        return ($productSortStock);
-    }
-
-
-    public function sortCompany_name(Request $request)
-    {       
-        $product = new Product;
-        $productSortCompany_name = $product->productSortCompany_name($request);
- 
-        return ($productSortCompany_name);
-    }
-
 
 
     //削除
@@ -201,8 +145,8 @@ class ProductController extends Controller
      *  @return $view
      */
     public function showDetail($id) {
-        $product_instance = new Product;
-        $product = $product_instance->productDetail($id);
+        $product_instans = new Product;
+        $product = $product_instans->productDetail($id);
 
         try{
             if(is_null($product)) {
@@ -220,13 +164,21 @@ class ProductController extends Controller
      *  @param $id
      *  @return $view
      */
-    public function showEdit($id)
-    {
-        $product = Product::find($id);
-        return view('product.edit', [
-            'product' => $product,
-            'companies' => Company::all()
-        ]);
+    public function showEdit($id) {
+        $product_instance = new Product;
+        $company_instance = new Company;
+
+        try{
+            $product = $product_instance->productDetail($id);
+            $company_list = $company_instance->companyList();
+            if(is_null($product)) {
+                \Session::flash('err_msg',config('messages.message3'));
+                return redirect(route('product.list'));
+            }
+        }catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
+        }
+        return view('product.edit',compact('product','company_list'));
     }
 
     /**
@@ -234,8 +186,7 @@ class ProductController extends Controller
      * @param ProductRequest $request
      * @return view
      */
-    public function exeUpdate(ProductRequest $request)  {
-        
+    public function exeUpdate(ProductRequest $request){
         $product_instance = new Product;
         $img_path = $request->file('img_path');
 
@@ -264,4 +215,5 @@ class ProductController extends Controller
         \Session::flash('err_msg',config('messages.message3'));
         return redirect(route('product.list'));
     }
+
 }
