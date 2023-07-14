@@ -255,18 +255,4 @@ class ProductController extends Controller
         return redirect(route('product.edit', $Product->id ));
     }
 
-
-    /**
-    * 在庫を減算する
-    * 
-    * @param  SaleRequest  $request
-    */
-    public function buy(SaleRequest $request)
-    {
-        $result = $this->sale->purchase($request->product_id);
-
-        return[
-            'result' => $result
-        ];
-    }
 }

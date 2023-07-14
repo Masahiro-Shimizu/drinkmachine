@@ -14,10 +14,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware(['auth'])->group(function (){
+Route::middleware(['middleware' => 'api'])->group(function (){
+
+Route::get('/list', 'ProductController@index')->name('product.list');
 
 //商品購入
-Route::post('product/buy/{id}', 'SaleController@buy')->name('product.buy');
+Route::post('product/buy/{$id}', 'SaleController@buy')->name('product.buy');
 
-Route::get('product/sale/{id}', 'SaleController@sale')->name('product.sale');
+Route::get('product/sale', 'SaleController@sale')->name('product.sale');
 });

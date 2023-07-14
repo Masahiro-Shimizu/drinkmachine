@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
-    public function buy(Request $request,$id)
+    public function buy(Request $request)
     {
         $query = Product::query();
         global $products;
@@ -34,15 +34,22 @@ class SaleController extends Controller
             DB::rollback();
         }
 
-        return response()->json(Sale::all());
+        //return response()->json(Sale::all());
+        return response()->json(['message' => '在庫がありません'], 422, ['Content-Type' => 'application/json'], Sale::all(),JSON_UNESCAPED_UNICODE);
     }
 
     public function sale(Request $request)
     {
-        $sale = new Sale();
-        $sale->id = $request->id;
-        $sale->product_id = $request->product_id;
-        $sale->save();
+        $products = \DB::table('products')
+        ->get();
+        //$sort = $request->sort;
+        $order = $request->order;
+        $orderpram = "desc";
+        return view('product.list', [
+            'companies' => Company::all(),
+            'products' => $products,
+            'order' => $orderpram
+        ]);
         return response()->json(Sale::all());
     }
 

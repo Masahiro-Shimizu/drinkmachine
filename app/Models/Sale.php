@@ -21,7 +21,7 @@ class Sale extends Model
     }
 
      //商品登録(販売時)
-    public function purchase(Request $request)
+    public function buy(Request $request)
     {        
         $inputs = $request->all();
         $Sale = Sale::create($inputs);
