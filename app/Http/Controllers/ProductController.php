@@ -27,7 +27,6 @@ class ProductController extends Controller
     {
         $products = \DB::table('products')
         ->get();
-        //$sort = $request->sort;
         $order = $request->order;
         $orderpram = "desc";
         return view('product.list', [
