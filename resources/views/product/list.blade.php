@@ -7,6 +7,7 @@
 @extends('layouts.common')
 @section('title', '商品一覧')
 @section('list')
+@section('list')
 <div class="container">
     <div class="row justify-content-center">
         <h1>商品一覧画面</h1>
@@ -58,6 +59,8 @@
                     </div>
 
                     <button id="search" type="button" value="検索">検索</button>
+
+                    <button id="search" type="button" value="検索">検索</button>
                 </form>
             </div>
         </div>
@@ -77,6 +80,14 @@
                     <th></th>
                     <th></th>
                 </tr>
+            </thead>
+
+            <tbody id="products_area">
+
+            </tbody>
+        </table>
+    </div>
+</div>
             </thead>
 
             <tbody id="products_area">
