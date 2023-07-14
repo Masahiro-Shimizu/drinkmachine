@@ -12,7 +12,7 @@
         <h1>商品一覧画面</h1>
         <div class="col-md-8">
             <div>
-                <form id="search-products">
+                <form id="search-products" class="form-inline my-2 my-lg-0">
                     @csrf
 
                     <div>
@@ -58,22 +58,35 @@
                     </div>
 
                     <button id="search" type="button" value="検索">検索</button>
+
+                    <button id="search" type="button" value="検索">検索</button>
                 </form>
             </div>
         </div>
+        @if ('err_msg')
+            <p class ="text-danger">{{ session('err_msg') }}</p>
+        @endif
 
-        <table id="sort_table" class="tablesorter-ice" data-sortlist="[[0,0]]">
+        <table id="sort_table" class="table table-striped" data-sortlist="[[0,0]]">
             <thead>
                 <tr>
-                    <th>@sortablelink('id')商品ID</th>
-                    <th>@sortablelink('product_name')商品名</th>
-                    <th>@sortablelink('price')価格</th>
-                    <th>@sortablelink('stock')在庫数</th>
-                    <th>@sortablelink('company_name')メーカー名</th>
+                    <th><a id="id"  class="sort-id">商品ID</a></th>
+                    <th><a id="product_name"  class="sort-product_name">商品名</a></th>
+                    <th><a id="price"  class="sort-price">価格</a></th>
+                    <th><a id="stock"  class="sort-stock">在庫数</a></th>
+                    <th><a id="company_name"  class="sort-company_name">メーカー名</a></th>
                     <th>画像</th>
                     <th></th>
                     <th></th>
                 </tr>
+            </thead>
+
+            <tbody id="products_area">
+
+            </tbody>
+        </table>
+    </div>
+</div>
             </thead>
 
             <tbody id="products_area">

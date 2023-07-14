@@ -18,13 +18,13 @@
                     メーカー名
                 </label>
                 <select name="company_id">
-                    @foreach ($company_list as $company_data)
-                    <option id="company_id" name="company_id" value="{{ $company_data->id }}"
-                        @if( $company_data->id == $product->company_id )
-                          selected
+                    @foreach ($companies as $company)
+                    <option id="company_id" name="company_id" value="{{ $company->id }}"
+                        @if( $company->id == $product->company_id )
+                            selected
                         @endif
                     >
-                        {{ $company_data -> company_name }}</option>
+                        {{ $company -> company_name }}</option>
                     @endforeach
                 </select>
                 @if ($errors->has('company_id'))
@@ -38,7 +38,8 @@
                 <label for="product_name">
                     商品名
                 </label>
-                <input name="product_name" class="form-control" value="{{ $product->product_name }}" type="text">
+                <input name="product_name" class="form-control"
+                    value="{{ $product->product_name }}" type="text">
                 @if ($errors->has('product_name'))
                     <div class="text-danger">
                         {{ $errors->first('product_name') }}
@@ -62,7 +63,7 @@
                 <label for="stock">
                     在庫
                 </label>
-                <input name="stock" class="form-control" value="{{ $product->stock }}" type="txet">
+                <input name="stock" class="form-control" value="{{ $product->stock }}" type="text">
                 @if ($errors->has('stock'))
                 <div class="text-danger">
                     {{ $errors->first('stock') }}
@@ -74,7 +75,7 @@
                 <label for="comment">
                     コメント
                 </label>
-                <textarea name="comment" class="form-control" rows="4"
+                <textarea name="comment" class="form-control" rows="4" 
                 >{{ $product->comment }}</textarea>
                 @if ($errors->has('comment'))
                 <div class="text-danger">
@@ -87,11 +88,11 @@
                 <label for="img_path">
                     画像
                 </label>
-                @if ($product->img_path === null)
-                    <img class="w-25 h-25"src="/storage/noimage.png">
-                @else
-                    <img class="w-25 h-25"src="{{ asset( '/storage'.$product->img_path) }}">
-                @endif
+                    @if ($product->img_path === null)
+                        <img class="w-25 h-25"src="/storage/noimage.png">
+                    @else
+                        <img class="w-25 h-25"src="{{ asset( '/storage'.$product->img_path) }}">
+                    @endif
                 <input type="file" name="img_path" class="form-control-file mt-2">
             </div>
             <div class="mt-5 mb-5">
