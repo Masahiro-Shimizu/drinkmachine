@@ -7,7 +7,6 @@
 @extends('layouts.common')
 @section('title', '商品一覧')
 @section('list')
-@section('list')
 <div class="container">
     <div class="row justify-content-center">
         <h1>商品一覧画面</h1>
