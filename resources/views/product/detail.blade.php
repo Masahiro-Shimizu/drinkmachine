@@ -34,6 +34,9 @@
     <button type="button" class="btn btn-primary" onclick="location.href='/product/edit/{{ $product->id }}'">
          編集
     </button>
+                <button type="button" class="btn btn-out-secondary" onclick="history.back()">
+                    戻る
+                </button>
         </div>
     </div>
 @endsection

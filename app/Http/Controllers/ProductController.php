@@ -201,8 +201,8 @@ class ProductController extends Controller
      *  @return $view
      */
     public function showDetail($id) {
-        $product_instans = new Product;
-        $product = $product_instans->productDetail($id);
+        $product_instance = new Product;
+        $product = $product_instance->productDetail($id);
 
         try{
             if(is_null($product)) {
@@ -222,13 +222,11 @@ class ProductController extends Controller
      */
     public function showEdit($id)
     {
-        $Product = Product::with('company')->find($id);
-        $Companies = Company::all();  
-        $Products = Product::all();
-        
-         
-
-        return view('product.edit',['Product' => $Product, 'Companies' => $Companies, 'Products' => $Products]);
+        $product = Product::find($id);
+        return view('product.edit', [
+            'product' => $product,
+            'companies' => Company::all()
+        ]);
     }
 
     /**
@@ -238,21 +236,32 @@ class ProductController extends Controller
      */
     public function exeUpdate(ProductRequest $request)  {
         
-        $inputs = $request->all();
-        $Product = Product::with('company')->find($inputs['id'],);
+        $product_instance = new Product;
+        $img_path = $request->file('img_path');
+
+        $path = null;
+        if (!empty($img_path)) {
+            $path = $img_path->store('\img', 'public');
+        }
+        
+        $update_date = [];
+        $update_date['id'] = $request->input('id');
+        $update_date['company_id'] = $request->input('company_id');
+        $update_date['product_name'] = $request->input('product_name');
+        $update_date['price'] = $request->input('price');
+        $update_date['stock'] = $request->input('stock');
+        $update_date['comment'] = $request->input('comment');
+        $update_date['img_path'] = $path;
+
         \DB::beginTransaction();
         try {
-        $products = new Product;
-        $productEdit = $products->productEdit($request);
-    
-        \DB::commit();
-        } catch(\Throwable $e) {
-        \DB::rollback();    
-        abort(500);
-        }   
-        \Session::flash('err_msg',config('messages.message2'));
-         
-        return redirect(route('product.edit', $Product->id ));
+            $product_instance->updateProduct($update_date);
+            \DB::commit();
+        } catch (\Throwable $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        \Session::flash('err_msg',config('messages.message3'));
+        return redirect(route('product.list'));
     }
-
 }
