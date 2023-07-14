@@ -11,11 +11,7 @@ return [
             'class' => 'fa fa-sort-alpha',
         ],
         'amount'  => [
-<<<<<<< HEAD
             'rows'  => ['amount', 'price','stock'],
-=======
-            'rows'  => ['amount', 'price'],
->>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
             'class' => 'fa fa-sort-amount',
         ],
         'numeric' => [
