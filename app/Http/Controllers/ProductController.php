@@ -8,9 +8,7 @@ use App\Http\Requests\ProductEditRequest;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
-use Illuminate\Support\Facades\DB;
-use App\Services\FileUploadService;
-use Illuminate\Support\Facades\Log;
+use App\Models\Sale;
 
 class ProductController extends Controller
 {
@@ -23,76 +21,38 @@ class ProductController extends Controller
     //商品一覧
     public function showList(Request $request)
     {
-        $products = \DB::table('products')->get();
-        return view('product.list', [
-            'companies' => Company::all(),
-            'products' => $products
-        ]);
-    }
-
-    //検索機能
-    public function searchProducts(Request $request)
-    {
-        //検索フォームに入力された値を取得
+        $product_instance = new Product;
+        $company_data = Company::all();
         $keyword = $request->input('keyword');
         $company_id = $request->input('company_id');
-        $price = $request->input('price');
-        $stock = $request->input('stock');
-        $from_price = $request->input('from_price');
-        $to_price = $request->input('to_price');
-        $from_stock = $request->input('from_stock');
-        $to_stock = $request->input('to_stock');
-        
-        
-        $query = Product::query();
 
-        $query->join('companies', 'products.company_id', '=', 'companies.id')
-            ->sortable()
-            ->select('products.*', 'companies.company_name');
 
-        //メーカー検索
-        if (!empty($company_id)) {
-            $query->where('company_id', $company_id);
-        }
-        //商品名検索
-        if (!empty($keyword)) {
-            $query->where('product_name', 'LIKE', "%{$keyword}%");
-        }
-        //価格検索
-        if (!empty($from_price)) {
-            $query->where('price', '>=', $from_price);
-        }
+        $product_list = $product_instance->getList($keyword, $company_id);
 
-        if (!empty($to_price)) {
-            $query->where('price', '<=', $to_price);
-        }
-
-        //在庫検索
-        if (!empty($from_stock)) {
-            $query->where('stock', '>=', $from_stock);
-        }
-
-        if (!empty($to_stock)) {
-            $query->where('stock', '<=', $to_stock);
-        }
-
-        $products = $query->sortable()->get();
-
-        return  response()->json($products);
+        return view('product.list', compact('product_list', 'company_data', 'keyword', 'company_id'));
     }
 
+    /**
+     * 商品詳細画面
+     *  @param $id
+     *  @return $view
+     */
+    public function showDetail($id) {
+        $product_instans = new Product;
+        $product = $product_instans->productDetail($id);
 
-    //削除
-    public function exeDelete(Request $request)
-    {
-        $product = Product::find($request->id);
-        $product->delete();
-        session()->flash('success', '商品を削除しました');
-        return  response()->json($product);
+        try{
+            if(is_null($product)) {
+                \session::flash('err_msg','データがありません。');
+                return redirect(route('product.list'));
+            }
+        }catch(\Throwable $e){
+            throw new \Exception($e->getMessage());
+        }
+        return view('product.detail',compact('product'));
     }
 
-
-     /**
+    /**
      * 商品登録画面
      * 
      * @return view
@@ -103,61 +63,6 @@ class ProductController extends Controller
         return view('product.form', compact('selectItems'));
     }
 
-
-    /**
-     * 商品登録画面を表示する
-     * ＠param ProductRequest $request
-     * @return view
-     */
-    public function exeStore(ProductRequest $request){
-        $product_instance = new Product;
-        $img_path = $request->file('img_path');
-
-        $path = null;
-        if (!empty($img_path)) {
-            $path = $img_path->store('\img', 'public');
-        }
-        
-        $insert_data = [];
-        $insert_data['company_id'] = $request->input('company_id');
-        $insert_data['product_name'] = $request->input('product_name');
-        $insert_data['price'] = $request->input('price');
-        $insert_data['stock'] = $request->input('stock');
-        $insert_data['comment'] = $request->input('comment');
-        $insert_data['img_path'] = $path;
-
-        \DB::beginTransaction();
-        try {
-            //商品を登録
-            $product_instance->createProduct($insert_data);
-            \DB::commit();
-        } catch (\Throwable $e) {
-            \DB::rollback();
-            throw new \Exception($e->getMessage());
-        }
-        \Session::flash('err_msg',config('messages.message2'));
-        return redirect(route('product.list'));
-    }
-    
-    /**
-     * 商品詳細画面
-     *  @param $id $message
-     *  @return $view
-     */
-    public function showDetail($id) {
-        $product_instans = new Product;
-        $product = $product_instans->productDetail($id);
-
-        try{
-            if(is_null($product)) {
-                \Session::flash('err_msg',config('messages.message1'));
-                return redirect(route('product.list'));
-            }
-        }catch(\Throwable $e){
-            throw new \Exception($e->getMessage());
-        }
-        return view('product.detail',compact('product'));
-    }
 
     /**
      * 商品編集フォーム画面
@@ -172,7 +77,7 @@ class ProductController extends Controller
             $product = $product_instance->productDetail($id);
             $company_list = $company_instance->companyList();
             if(is_null($product)) {
-                \Session::flash('err_msg',config('messages.message3'));
+                \session::flash('err_msg','データがありません。');
                 return redirect(route('product.list'));
             }
         }catch(\Throwable $e){
@@ -181,48 +86,53 @@ class ProductController extends Controller
         return view('product.edit',compact('product','company_list'));
     }
 
-    /**
-     * 商品編集フォーム
-     * @param ProductRequest $request
-     * @return view
-     */
-    public function exeUpdate(ProductRequest $request){
-        $product_instance = new Product;
-        $img_path = $request->file('img_path');
-
-        $path = null;
-        if (!empty($img_path)) {
-            $path = $img_path->store('\img', 'public');
+    // 商品追加処理
+    public function store(ProductRequest $request, FileUploadService $service)
+    {
+        // //画像投稿処理
+        if (isset($img_path)) {
+            $file_name = $request->file('img_path')->getClientOriginalName();
+            $path = $request->img_path->storeAs('public/images', $file_name);
+            $save_path = str_replace('public/images/', '', $path);
+        } else {
+            $save_path = "";
         }
-        
-        $update_date = [];
-        $update_date['id'] = $request->input('id');
-        $update_date['company_id'] = $request->input('company_id');
-        $update_date['product_name'] = $request->input('product_name');
-        $update_date['price'] = $request->input('price');
-        $update_date['stock'] = $request->input('stock');
-        $update_date['comment'] = $request->input('comment');
-        $update_date['img_path'] = $path;
+
+        Product::create([
+            'user_id' => \Auth::user()->id,
+            'product_name' => $request->product_name,
+            'comment' => $request->comment,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'img_path' => $save_path,
+            'company_id' => $request->company_id,
+        ]);
+
+    }
+
+    /**
+     * 商品情報削除
+     * ＠param $id
+     */
+    public function exeDelete($id)
+    {
+        $product_instance = new Product;
+        if(empty($id)){
+            \Session::flash('err_msg','該当データはありません');
+            return redirect(route('product.list'));
+        }
 
         \DB::beginTransaction();
-        try {
-            $product_instance->updateProduct($update_date);
+        try{
+            $product_instance->deleteProduct($id);
             \DB::commit();
-        } catch (\Throwable $e) {
-            \DB::rollback();
+        }catch(\Throwable $e){
             throw new \Exception($e->getMessage());
+            \DB::rollback();
         }
-        \Session::flash('err_msg',config('messages.message3'));
+        \Session::flash('err_msg','削除しました。');
+
         return redirect(route('product.list'));
     }
 
-    //購入処理
-    public function purchase(SaleRequest $request)
-    {
-        $sale = Sale::create([
-            'user_id' => \Auth::user()->id,
-            'product_id' => $request->id,
-        ]);
-        return redirect()->route('products.purchase', $request->id);
-    }
 }
