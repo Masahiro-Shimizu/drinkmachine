@@ -65,9 +65,9 @@
             <p class ="text-danger">{{ session('err_msg') }}</p>
         @endif
 
-        <table id="sort_table" class="tablesorter-ice" data-sortlist="[[0,0]]">
+        <table id="sort_table" class="table table-striped" data-sortlist="[[0,0]]">
             <thead>
-                <tr class="product_list">
+                <tr>
                     <th><a id="id"  class="sort-id">商品ID</a></th>
                     <th><a id="product_name"  class="sort-product_name">商品名</a></th>
                     <th><a id="price"  class="sort-price">価格</a></th>
