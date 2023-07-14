@@ -63,18 +63,6 @@ class ProductController extends Controller
         return view('product.form', compact('selectItems'));
     }
 
-        //在庫検索
-        if (!empty($from_stock)) {
-            $query->where('stock', '>=', $from_stock);
-        }
-
-        if (!empty($to_stock)) {
-            $query->where('stock', '<=', $to_stock);
-        }
-        \Session::flash('err_msg','商品を登録しました。');
-
-        return redirect(route('product.list'));
-    }
 
     /**
      * 商品編集フォーム画面
@@ -98,15 +86,6 @@ class ProductController extends Controller
         return view('product.edit',compact('product','company_list'));
     }
 
-    /**
-     * 商品編集画面を表示する
-     * ＠param ProductRequest $request
-     * @return view
-     */
-    public function exeUpdate(ProductRequest $request){
-        $product_instance = new Product;
-        $img_path = $request->file('img_path');
-
     // 商品追加処理
     public function store(ProductRequest $request, FileUploadService $service)
     {
@@ -129,17 +108,6 @@ class ProductController extends Controller
             'company_id' => $request->company_id,
         ]);
 
-        \DB::beginTransaction();
-        try {
-            $product_instance->updateProduct($update_date);
-            \DB::commit();
-        } catch (\Throwable $e) {
-            \DB::rollback();
-            throw new \Exception($e->getMessage());
-        }
-        \Session::flash('err_msg','商品情報を更新しました。');
-
-        return redirect(route('product.list'));
     }
 
     /**
