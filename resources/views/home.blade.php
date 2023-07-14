@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <a href="{{ route('product.list') }}">You are logged in!
+                    <a href="{{ route('product.list') }}">You are logged in! welcome!
                 </div>
             </div>
         </div>
