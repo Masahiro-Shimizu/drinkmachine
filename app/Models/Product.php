@@ -12,10 +12,17 @@ class Product extends Model
 
     //テーブルを指定
     protected  $table = 'products';
+<<<<<<< HEAD
     use Sortable;
 
     protected $fillable = ['user_id', 'comment', 'img_path', 'product_name', 'price', 'stock', 'company_id'];
     public $sortable = ['products'];
+=======
+    use sortable;
+
+    protected $fillable = ['user_id', 'comment', 'img_path', 'product_name', 'price', 'stock', 'company_id'];
+
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
 
 
     public function getList() {
@@ -31,6 +38,7 @@ class Product extends Model
 
     public function user() {
         return $this->belongsTo('App\Models\User');
+<<<<<<< HEAD
     }
 
     public function isSoldOut() {
@@ -205,7 +213,7 @@ class Product extends Model
     /**
      * 商品詳細編集
      * @param $param
-     * @return 
+     * @return
      */
     public function updateProduct($param) {
         DB::table('products')
@@ -221,4 +229,12 @@ class Product extends Model
     }
 
 
+=======
+    }
+
+    public function isSoldOut() {
+        return $this->hasMany ('App\Models\Sale')->count() >0 ;
+    }
+
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
 }

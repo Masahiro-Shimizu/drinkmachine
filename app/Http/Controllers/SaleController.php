@@ -11,47 +11,55 @@ class SaleController extends Controller
 {
     public function buy(Request $request)
     {
-        $query = Product::query();
-        global $products;
-        $products = $query->where('id', $request->product_id)->get();
-        $stock = Product::select('stock')->count();
-        if ($stock < 0){
-            return false;
+    try {
+        $product = Product::findOrFail($request->product_id);
+        $quantity = $request->quantity;
+
+        if ($product->stock < $quantity) {
+            return response()->json([config('messages.message5')], 422);
         }
 
         DB::beginTransaction();
-        try {
+
+        for ($i = 0; $i < $quantity; $i++) {
             $sale = new Sale();
             $sale->product_id = $request->product_id;
             $sale->created_at = now();
             $sale->updated_at = now();
             $sale->save();
 
-            DB::table('products')->decrement('stock');
-
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
+            $product->decrement('stock');
         }
 
-        //return response()->json(Sale::all());
-        return response()->json(['message' => '在庫がありません'], 422, ['Content-Type' => 'application/json'], Sale::all(),JSON_UNESCAPED_UNICODE);
+        DB::commit();
+
+        return response()->json([config('messages.message6')]);
+    } catch (\Exception $e) {
+        DB::rollback();
+        return response()->json([config('messages.message7')], 500);
+    }
     }
 
-    public function sale(Request $request)
+    public function increase(Request $request)
     {
-        $products = \DB::table('products')
-        ->get();
-        //$sort = $request->sort;
-        $order = $request->order;
-        $orderpram = "desc";
-        return view('product.list', [
-            'companies' => Company::all(),
-            'products' => $products,
-            'order' => $orderpram
-        ]);
-        return response()->json(Sale::all());
+        try {
+            $product = Product::findOrFail($request->product_id);
+            $quantity = $request->quantity;
+    
+            DB::beginTransaction();
+    
+            for ($i = 0; $i < $quantity; $i++) {
+                $product->increment('stock');
+            }
+    
+            DB::commit();
+    
+            return response()->json([config('messages.message8')]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([config('messages.message7')], 500);
+        }
+    
     }
-
 
 }

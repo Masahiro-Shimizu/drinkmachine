@@ -20,6 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 //商品一覧画面
 Route::get('/list', 'ProductController@showList')->name('product.list');
 Route::get('/search','ProductController@searchProducts')->name('product.searchProducts');
+<<<<<<< HEAD
 // 商品情報のソート
 Route::get('/list/sort/id', 'ProductController@sortId')->name('sort-id');
 
@@ -35,6 +36,8 @@ Route::get('/list/sort/stock', 'ProductController@sortStock')->name('sort-stock'
 // 商品情報のソート
 Route::get('/list/sort/company_name', 'ProductController@sortCompany_name')->name('sort-company_name');
 
+=======
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
 //①ルーティング作成(登録画面表示・ブログ登録)
 //②コントローラーの作成(登録画面の表示)
 //③登録画面のBladeを表示(CSRF対策)
@@ -50,7 +53,7 @@ Route::post('/product/store','productController@exeStore')->name('product.store'
 Route::get('/product/{id}', 'ProductController@showDetail')->name('product.detail');
 //商品詳細編集画面
 Route::get('/product/edit/{id}', 'ProductController@showEdit')->name('product.edit');
-Route::post('/product/update','ProductController@exeUpdate')->name('product.update');
+Route::post('/product/update', 'ProductController@exeUpdate')->name('product.update');
 //商品削除画面
 Route::post('/product/delete','ProductController@exeDelete')->name('product.delete');
 });

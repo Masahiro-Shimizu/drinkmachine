@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 window.addEventListener('DOMContentLoaded', function () {
    /** jQueryの処理 */
    $.ajaxSetup({
+=======
+window.addEventListener('DOMContentLoaded', function(){
+    /** jQueryの処理 */ 
+    $.ajaxSetup({
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
       headers: {
          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
    });
+<<<<<<< HEAD
 
    ajaxSearch();
 
@@ -12,16 +19,32 @@ window.addEventListener('DOMContentLoaded', function () {
       ajaxSearch();
    });
 
+=======
+   
+   ajaxSearch();
+   
+   $('#search').on('click', function () {
+      ajaxSearch();
+   });
+   
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
    function ajaxSearch() {
       $("tbody").empty();
       let keyword = $('#keyword').val();
       let product_id = $('#product_id').val();
+<<<<<<< HEAD
       let company_id = $('#company_id').val();
+=======
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
       let from_price = $('#from_price').val();
       let to_price = $('#to_price').val();
       let from_stock = $('#from_stock').val();
       let to_stock = $('#to_stock').val();
+<<<<<<< HEAD
 
+=======
+   
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
       $.ajax({
          type: 'GET', // HTTPリクエストメソッドの指定
          url: '/search', // 送信先URLの指定
@@ -32,7 +55,10 @@ window.addEventListener('DOMContentLoaded', function () {
             // サーバーに送信したいデータを指定
             keyword: keyword,
             product_id: product_id,
+<<<<<<< HEAD
             company_id: company_id,
+=======
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
             from_price: from_price,
             to_price: to_price,
             from_stock: from_stock,
@@ -40,7 +66,11 @@ window.addEventListener('DOMContentLoaded', function () {
          }
       }).done(function (data) {
          let html = '';
+<<<<<<< HEAD
          $.each(data, function (index, value) {
+=======
+         $.each(data, function (index,value) {
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
             let id = value.id;
             let product_name = value.product_name;
             let price = value.price;
@@ -49,7 +79,11 @@ window.addEventListener('DOMContentLoaded', function () {
             if (value.img_path !== "") {
                img_path = '/images/' + value.img_path;
             } else {
+<<<<<<< HEAD
                img_path = 'http://localhost:8000/drinkmachine/public/images/no_image.png';
+=======
+               img_path = 'http://localhost:8888/vmachine/public/images/no_image.png';
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
             }
             html = `
                           <tr class="product_list">
@@ -59,22 +93,38 @@ window.addEventListener('DOMContentLoaded', function () {
                               <td class="stock">${stock}</td>
                               <td class="company_name">${company_name}</td>
                               <td class="img_path"><img src="${img_path}"></td>
+<<<<<<< HEAD
                               <td class="show"><button class="btn btn-info" type="button" name="show" value="show">商品詳細</button></td>
                               <form method="post" class="delete" action="{{ route('product.delete', $product->id) }}">
                                @csrf
                                @method('delete')
                               <td class="delete"><button class="btn btn-danger" data-id='".$product_id."' id="delete" type="button" name="delete" value="delete">削除</button></td>
+=======
+                              <td class="show"><button class="show_button" type="button" name="show" value="show">商品詳細</button></td>
+                              <form method="post" class="delete" action="{{ route('product.delete', $product->id) }}">
+                               @csrf
+                               @method('delete')
+                              <td class="delete"><button class="delete_button" data-id='".$product_id."' id="delete" type="button" name="delete" value="delete">削除</button></td>
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
                               </form>
                           </tr>
              `;
             $('#products_area').append(html); //できあがったテンプレートを id=products_area の中に追加
          })
+<<<<<<< HEAD
+=======
+         $(function () {
+            $('#sort_table').tablesorter();
+         });
+         $("#sort_table").trigger("update");
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
       }).fail(function () {
          // 通信が失敗したときの処理
          console.log('エラーです');
          // alert('エラーです');
       })
    }
+<<<<<<< HEAD
 
    //商品詳細ページへ
    $(function () {
@@ -92,6 +142,22 @@ window.addEventListener('DOMContentLoaded', function () {
          $.ajax({
             type: 'POST',
             url: '/product/delete',
+=======
+   
+   //商品詳細ページへ
+   $(document).on("click", ".show_button", function () {
+      let product_id = $(this).closest('tr').children('td:first').text();
+      window.location.href = "/vmachine/public/products/" + product_id;
+   });
+   
+   // 商品削除
+   $(function () {
+      $(document).on("click", ".delete_button", function (event) {
+         let id = $(this).closest('tr').children('td:first').text();
+         $.ajax({
+            type: 'POST',
+            url: '/vmachine/public/products/delete',
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f
             async: true, // 非同期通信フラグの指定
             dataType: 'json', // 受信するデータタイプの指定
             timeout: 10000, // タイムアウト時間の指定
@@ -111,6 +177,7 @@ window.addEventListener('DOMContentLoaded', function () {
             })
       });
    });
+<<<<<<< HEAD
 
    //ソート機能(id)
    $(function () {
@@ -703,3 +770,6 @@ window.addEventListener('DOMContentLoaded', function () {
       });
    });
 });
+=======
+});   
+>>>>>>> 423b1b9139e14132222999eeed2d918752c4ac2f

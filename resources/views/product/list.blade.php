@@ -58,6 +58,8 @@
                     </div>
 
                     <button id="search" type="button" value="検索">検索</button>
+
+                    <button id="search" type="button" value="検索">検索</button>
                 </form>
             </div>
         </div>
@@ -77,6 +79,14 @@
                     <th></th>
                     <th></th>
                 </tr>
+            </thead>
+
+            <tbody id="products_area">
+
+            </tbody>
+        </table>
+    </div>
+</div>
             </thead>
 
             <tbody id="products_area">
