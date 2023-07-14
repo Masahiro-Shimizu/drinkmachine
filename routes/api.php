@@ -16,9 +16,12 @@ use Illuminate\Http\Request;
 
 Route::middleware(['middleware' => 'api'])->group(function (){
 
+Route::get('/list', 'ProductController@showList')->name('product.list');
+
 //商品購入
-Route::post('products/purchase', 'SaleController@purchase')->name('products.purchase');
+Route::post('product/buy/{id}', 'SaleController@buy')->name('product.buy');
 
-Route::get('products/purchase', 'SaleController@sales')->name('products.sales');
+Route::get('product/sale/{id}', 'SaleController@sale')->name('product.sale');
 
+Route::post('product/increase/{id}', 'SaleController@increase')->name('product.increase');
 });

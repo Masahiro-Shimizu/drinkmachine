@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    //テーブル名
-    protected $table = 'companies';
-
     //挿入できるようにカラムを宣言
     protected $fillable = ['company_name', 'street_address', 'representative_name'];
 

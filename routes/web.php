@@ -11,6 +11,7 @@
 |
 */
 
+Route::middleware(['middleware' => 'api'])->group(function(){
 Route::get('/', 'Homecontroller@index')->name('root.login');
 
 Auth::routes();
@@ -19,7 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 //商品一覧画面
 Route::get('/list', 'ProductController@showList')->name('product.list');
 Route::get('/search','ProductController@searchProducts')->name('product.searchProducts');
-// 商品情報のソート
+//商品情報のソート
 Route::get('/list/sort/id', 'ProductController@sortId')->name('sort-id');
 
 // 商品情報のソート
@@ -49,6 +50,7 @@ Route::post('/product/store','productController@exeStore')->name('product.store'
 Route::get('/product/{id}', 'ProductController@showDetail')->name('product.detail');
 //商品詳細編集画面
 Route::get('/product/edit/{id}', 'ProductController@showEdit')->name('product.edit');
-Route::post('/product/update','ProductController@exeUpdate')->name('product.update');
+Route::post('/product/update', 'ProductController@exeUpdate')->name('product.update');
 //商品削除画面
 Route::post('/product/delete','ProductController@exeDelete')->name('product.delete');
+});

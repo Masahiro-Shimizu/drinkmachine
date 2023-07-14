@@ -205,7 +205,7 @@ class Product extends Model
     /**
      * 商品詳細編集
      * @param $param
-     * @return 
+     * @return
      */
     public function updateProduct($param) {
         DB::table('products')
