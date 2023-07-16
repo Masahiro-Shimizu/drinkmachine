@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
+    //商品購入処理
     public function buy(Request $request)
     {
     try {
@@ -40,6 +41,7 @@ class SaleController extends Controller
     }
     }
 
+    //在庫増加処理
     public function increase(Request $request)
     {
         try {
